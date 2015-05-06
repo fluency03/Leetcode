@@ -23,36 +23,30 @@ class Solution:
 	# @return an integer
 	def numIslands(self, grid):
 		# print (grid)
-		if len(grid)==0 or len(grid[0])==0 or grid==None:
-			return 0
-		island = 0
-		# pre = 0
-		for line in grid:
-			pre = '0'
-			for i in range(len(line)):
-				if line[i]=='1' and pre=='0':
-					island += 1
-				pre = line[i]
-		# print (island)
-		connection = []
-		pre_line = grid[0]
-		for line in grid[1:]:
-			connect = (int(pre_line[i]) and int(line[i]) for i in range(len(line)))
-			connection.append(list(connect))
-			pre_line = line
-		# print (connection)
-		merge = 0
-		# pre = 0
-		for line in connection:
-			pre = 0
-			for point in line:
-				if point==1 and pre==0:
-					merge += 1
-				pre = point
-		# print (island, merge)
-		if island != 0 and island==merge:
-			return 1
-		return island-merge         
+		result = 0
+		if not len(grid):
+			return result
+		m, n = len(grid), len(grid[0])
+		visited = [ [False]*n for x in range(m) ]
+		for x in range(m):
+			for y in range(n):
+				if grid[x][y]=='1' and not visited[x][y]:
+					result += 1
+					self.BFS(grid, visited, x, y, m, n)
+		return result
+	def BFS(self, grid, visited, x, y, m, n):
+		direction = zip( [1, 0, -1, 0], [0, 1, 0, -1] )
+		queue = [ (x,y) ]
+		visited[x][y] = True
+		while queue:
+			front = queue.pop(0)
+			for p in direction:
+				np = (front[0]+p[0], front[1]+p[1])
+				if self.isValid(np, m, n) and grid[np[0]][np[1]]=='1' and not visited[np[0]][np[1]]:
+					visited[np[0]][np[1]] = True
+					queue.append(np)
+	def isValid(self, np, m, n):
+		return np[0]>=0 and np[0]<m and np[1]>=0 and np[1]<n
 
 grid = ["11110", "11010", "11000", "00000"]
 
