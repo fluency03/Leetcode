@@ -36,8 +36,6 @@ class Solution:
 					# seqs.remove(p)
 			if flag >= 2 and q not in repeated:
 				repeated.append(q)
-			# if q in seqs:
-				# seqs.remove(q)
 		return repeated
 	def findRepeatedDnaSequences1(self, s):
 		ans = []
