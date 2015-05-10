@@ -19,7 +19,7 @@ class Solution:
 		size = len(prices)
 		if k >= size/2:
 			return self.quickSolve(size, prices)
-		profit = [ None ]*(2*k+1)
+		profit = [ float("-inf") ]*(2*k+1)
 		profit[0] = 0
 		for i in range(size):
 			for j in range(1, min(2*k, i+1)+1):
@@ -36,9 +36,40 @@ class Solution:
 				sum += prices[x+1]-prices[x]
 		return sum
 
+# This Solution2 is much slower than Solution1. 
+class Solution2:
+	# @param {integer} k
+	# @param {integer[]} prices
+	# @return {integer}
+	def maxProfit(self, k, prices):
+		size = len(prices)
+		if size == 0:
+			return 0
+		if k >= size/2:
+			return self.quickSolve(size, prices)
+		glo = [0] * (k+1) 
+		loc = [0] * (k+1)
+		for i in range(size-1):
+			diff = prices[i+1] - prices[i]
+			for j in range(k, 0, -1):
+				loc[j] = max(glo[j - 1] + max(diff, 0), loc[j] + diff);
+				glo[j] = max(glo[j], loc[j]);
+		return glo[k]
+	def quickSolve(self, size, prices):
+		'''Greedy'''
+		# 由于直接采用动态规划会返回Time Limit Exceeded，可以针对题目部分样例做出下面的优化：
+		# 令最大交易次数为k，数组长度为size；
+		# 则当k > size / 2时，问题可以转化为：Best Time to Buy and Sell Stock II
+		sum = 0
+		for x in range(size-1):
+			if prices[x+1] > prices[x]:
+				sum += prices[x+1]-prices[x]
+		return sum
+
+
 solution = Solution()
 
 # prices = [5, 6, 3, 8 ,9, 12, 6, 9, 10]
-prices = [1, 2]
+prices = [3,2,6,5,0,3]
 
-print (solution.maxProfit(1, prices))
+print (solution.maxProfit(2, prices))
