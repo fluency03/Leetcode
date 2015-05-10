@@ -22,7 +22,7 @@ class Solution:
 		profit = [ None ]*(2*k+1)
 		profit[0] = 0
 		for i in range(size):
-			for j in range(min(2*k, i+1), 0, -1):
+			for j in range(1, min(2*k, i+1)+1):
 				profit[j] = max(profit[j], profit[j-1]+prices[i]*[1, -1][j%2]) 
 		return max(profit)
 	def quickSolve(self, size, prices):
